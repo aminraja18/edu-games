@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Padankan Perkataan Arab</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .game-container {
+      display: flex;
+      gap: 50px;
+      margin-top: 20px;
+    }
+
+    .word-list, .target-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .word, .target {
+      padding: 10px 20px;
+      background: #fff;
+      border: 2px solid #ccc;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.2s;
+    }
+
+    .target {
+      min-width: 100px;
+    }
+
+    .word.dragging {
+      opacity: 0.5;
+    }
+
+    .target.over {
+      border-color: green;
+      background-color: #e0ffe0;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #2d862d;
+    }
+  </style>
+</head>
+<body>
+  <h1>📖 Padankan Perkataan Arab</h1>
+  <p>Padankan perkataan Arab dengan maksud Bahasa Melayu.</p>
+
+  <div class="game-container">
+    <div class="word-list">
+      <div class="word" draggable="true" data-match="rumah">بَيْتٌ</div>
+      <div class="word" draggable="true" data-match="buku">كِتَابٌ</div>
+      <div class="word" draggable="true" data-match="pensel">قَلَمٌ</div>
+    </div>
+
+    <div class="target-list">
+      <div class="target" data-target="pensel">Pensel</div>
+      <div class="target" data-target="rumah">Rumah</div>
+      <div class="target" data-target="buku">Buku</div>
+    </div>
+  </div>
+
+  <p id="result"></p>
+
+  <script>
+    const words = document.querySelectorAll('.word');
+    const targets = document.querySelectorAll('.target');
+    let draggedItem = null;
+
+    words.forEach(word => {
+      word.addEventListener('dragstart', () => {
+        draggedItem = word;
+        word.classList.add('dragging');
+      });
+
+      word.addEventListener('dragend', () => {
+        draggedItem = null;
+        word.classList.remove('dragging');
+      });
+    });
+
+    targets.forEach(target => {
+      target.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        target.classList.add('over');
+      });
+
+      target.addEventListener('dragleave', () => {
+        target.classList.remove('over');
+      });
+
+      target.addEventListener('drop', () => {
+        if (draggedItem && draggedItem.dataset.match === target.dataset.target) {
+          target.textContent = draggedItem.textContent;
+          draggedItem.remove();
+          target.classList.remove('over');
+
+          // check if all matched
+          if (document.querySelectorAll('.word').length === 0) {
+            document.getElementById('result').textContent = 'Tahniah! Semua jawapan betul ✅';
+          }
+        } else {
+          document.getElementById('result').textContent = 'Salah padanan. Cuba lagi. ❌';
+          target.classList.remove('over');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
