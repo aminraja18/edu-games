@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Padankan Soalan Matematik</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f2f2f2;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .game-container {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: white;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      padding: 15px 25px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    .card:hover {
+      background: #e0f7fa;
+    }
+
+    .matched {
+      background-color: #c8e6c9;
+      pointer-events: none;
+    }
+
+    #status {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #00695c;
+    }
+  </style>
+</head>
+<body>
+  <h1>➕ Padankan Soalan & Jawapan</h1>
+  <p>Klik satu soalan dan satu jawapan yang sepadan.</p>
+
+  <div class="game-container" id="question-container"></div>
+  <div class="game-container" id="answer-container"></div>
+
+  <p id="status"></p>
+
+  <script>
+    const questions = [
+      { q: '5 + 3', a: '8' },
+      { q: '10 - 6', a: '4' },
+      { q: '4 x 2', a: '8' },
+      { q: '12 / 3', a: '4' }
+    ];
+
+    const shuffled = [...questions].sort(() => Math.random() - 0.5);
+    const shuffledAnswers = [...questions.map(q => q.a)].sort(() => Math.random() - 0.5);
+
+    let selectedQuestion = null;
+    let selectedAnswer = null;
+
+    const qContainer = document.getElementById("question-container");
+    const aContainer = document.getElementById("answer-container");
+    const status = document.getElementById("status");
+
+    shuffled.forEach(q => {
+      const el = document.createElement("div");
+      el.className = "card";
+      el.textContent = q.q;
+      el.dataset.answer = q.a;
+      el.addEventListener("click", () => {
+        selectedQuestion = el;
+        checkMatch();
+      });
+      qContainer.appendChild(el);
+    });
+
+    shuffledAnswers.forEach(ans => {
+      const el = document.createElement("div");
+      el.className = "card";
+      el.textContent = ans;
+      el.addEventListener("click", () => {
+        selectedAnswer = el;
+        checkMatch();
+      });
+      aContainer.appendChild(el);
+    });
+
+    function checkMatch() {
+      if (selectedQuestion && selectedAnswer) {
+        if (selectedQuestion.dataset.answer === selectedAnswer.textContent) {
+          selectedQuestion.classList.add("matched");
+          selectedAnswer.classList.add("matched");
+          status.textContent = "Betul! ✅";
+        } else {
+          status.textContent = "Salah. Cuba lagi ❌";
+        }
+        selectedQuestion = null;
+        selectedAnswer = null;
+      }
+    }
+  </script>
+</body>
+</html>
