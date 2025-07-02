@@ -2,211 +2,161 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>أَعْمَالِي اليَوْمِيَّة - A`mali Al-Yaumiah</title>
+  <title>رحلة إلى حديقة الحيوانات</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --primary: #2d2d2d;
-      --accent: #5f9ea0;
-      --bg-light: #f9f9f9;
-      --bg-card: #ffffff;
-      --text-muted: #666;
-    }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg-light);
-      color: var(--primary);
+      font-family: 'Inter', sans-serif;
       margin: 0;
-      padding: 20px;
+      background: #f9fafb;
+      color: #333;
+      line-height: 1.7;
     }
-    .container {
-      max-width: 900px;
-      margin: auto;
-      background: var(--bg-card);
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-    }
-    h1, h2 {
-      text-align: center;
-      color: var(--accent);
-    }
-    .card {
-      display: flex;
-      align-items: center;
-      margin: 20px 0;
-      padding: 15px;
-      background-color: #f0f4f3;
-      border-left: 5px solid var(--accent);
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    }
-    .card img {
-      width: 90px;
-      height: 90px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-right: 15px;
-      border: 1px solid #ccc;
-    }
-    .text {
-      flex: 1;
-    }
-    .arabic {
-      font-size: 1.3em;
-      font-weight: bold;
-      direction: rtl;
-      color: #222;
-    }
-    .translation {
-      font-size: 1em;
-      color: var(--text-muted);
-      margin-top: 6px;
-    }
-    .game-section {
-      margin-top: 50px;
-    }
-    .game-box {
-      border: 1px solid #ddd;
-      padding: 20px;
-      border-radius: 12px;
-      background-color: #fff;
+
+    header {
+      background: #fff;
+      padding: 2rem 1rem;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      margin-bottom: 30px;
+      text-align: center;
     }
-    .draggable {
-      padding: 8px 12px;
-      margin: 5px;
-      background-color: #dcefe8;
-      border-radius: 6px;
-      cursor: move;
-      display: inline-block;
-      border: 1px solid #a3cfc4;
+
+    header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
     }
-    .dropzone {
-      min-height: 40px;
-      padding: 12px;
-      background-color: #eefaf5;
-      border: 2px dashed #8bc34a;
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 1.5rem;
+    }
+
+    section {
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #0ea5e9;
+      padding-left: 0.5rem;
+      color: #0f172a;
+    }
+
+    .qa-pair {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .question {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #1e293b;
+    }
+
+    .answer, .translation {
+      margin-bottom: 0.3rem;
+    }
+
+    .drag-drop {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .dd-box {
+      background: #fff;
+      padding: 1rem;
       border-radius: 8px;
-      margin-top: 10px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
-    ul li {
-      cursor: pointer;
-      margin-bottom: 6px;
-      color: #444;
+
+    .mcq {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
-    ul li:hover {
-      background-color: #f2f2f2;
+
+    .mcq p {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
     }
-    .check-btn {
-      margin-top: 15px;
-      background-color: var(--accent);
-      color: white;
-      padding: 10px 20px;
-      border: none;
+
+    .options span {
+      display: block;
+      margin: 0.25rem 0;
+      padding: 0.3rem 0.6rem;
       border-radius: 6px;
-      cursor: pointer;
-    }
-    .check-btn:hover {
-      background-color: #4d8d8b;
-    }
-    .result {
-      margin-top: 10px;
-      font-weight: bold;
-      color: #388e3c;
+      background-color: #f1f5f9;
     }
   </style>
 </head>
 <body>
+
+  <header>
+    <h1>رحلة إلى حديقة الحيوانات</h1>
+    <p>Aktiviti Bahasa Arab Interaktif Tahun 3–4</p>
+  </header>
+
   <div class="container">
-    <h1>أَعْمَالِي اليَوْمِيَّة</h1>
-    <h2>A`mali Al-Yaumiah</h2>
 
-    <p class="arabic" style="text-align:center; font-size: 1.1em;">بِسْمِ اللَّهِ، هَذَا وَصْفٌ لِأَعْمَالِي اليَوْمِيَّةِ.</p>
+    <!-- Window 1 -->
+    <section>
+      <h2>🪟 Bahagian 1: Hafalan Soalan & Jawapan</h2>
+      <div class="qa-pair">
+        <div class="question">١. مَتَى تَسْتَيْقِظُ مِنَ النَّوْمِ؟<br><small>Bila kamu bangun dari tidur?</small></div>
+        <div class="answer">اِسْتَيْقَظْتُ فِي السَّاعَةِ الْخَامِسَةِ صَبَاحًا.</div>
+        <div class="translation">Saya bangun pada pukul 5 pagi.</div>
+      </div>
+      <!-- Tambah soalan 2 hingga 10 di sini, ulang blok qa-pair -->
+      <!-- Potong untuk ringkas, tapi anda boleh tambah hingga soalan 10 -->
+    </section>
 
-    <!-- Kad nota kekal seperti asal -->
-
-    <div class="game-section">
-      <h2>🧠 Hafalan: Susun Semula Ayat</h2>
-      <div class="game-box">
-        <p>Seret dan susun semula perkataan Arab di bawah mengikut susunan asal:</p>
-        <div id="drag-words">
-          <span class="draggable" draggable="true">السَّادِسَةَ</span>
-          <span class="draggable" draggable="true">صَبَاحًا</span>
-          <span class="draggable" draggable="true">مِنَ</span>
-          <span class="draggable" draggable="true">النَّوْمِ</span>
-          <span class="draggable" draggable="true">السَّاعَةَ</span>
-          <span class="draggable" draggable="true">أَسْتَيْقِظُ</span>
+    <!-- Window 2 -->
+    <section>
+      <h2>🪟 Bahagian 2: Padanan Drag & Drop</h2>
+      <div class="drag-drop">
+        <div class="dd-box">
+          <strong>Soalan</strong>
+          <ul>
+            <li>مَتَى تَسْتَيْقِظُ مِنَ النَّوْمِ؟</li>
+            <li>كَيْفَ تَذْهَبُ إِلَى هُنَاكَ؟</li>
+            <li>مَاذَا تُشَاهِدُ؟</li>
+          </ul>
         </div>
-        <div id="dropzone" class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        <button class="check-btn" onclick="checkOrder()">Semak Jawapan</button>
-        <div id="order-result" class="result"></div>
+        <div class="dd-box">
+          <strong>Jawapan</strong>
+          <ul>
+            <li>ذَهَبْتُ بِالْحَافِلَةِ الْـمَدْرَسِيَّةِ الْكَبِيرَةِ.</li>
+            <li>شَاهَدْتُ الْفِيلَ وَالدُّبَّ.</li>
+            <li>اِسْتَيْقَظْتُ فِي السَّاعَةِ الْخَامِسَةِ.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Window 3 -->
+    <section>
+      <h2>🪟 Bahagian 3: Soalan Objektif (ABCD)</h2>
+
+      <div class="mcq">
+        <p>١. مَتَى تَسْتَيْقِظُ مِنَ النَّوْمِ؟<br><small>Bila kamu bangun dari tidur?</small></p>
+        <div class="options">
+          <span>A. فِي السَّاعَةِ السَّادِسَةِ</span>
+          <span>B. فِي السَّاعَةِ الْخَامِسَةِ ✅</span>
+          <span>C. فِي السَّاعَةِ الثَّامِنَةِ</span>
+          <span>D. فِي السَّاعَةِ السَّابِعَةِ</span>
+        </div>
       </div>
 
-      <h2>🧩 Padankan Arab dan Melayu</h2>
-      <div class="game-box">
-        <p>Padankan ayat Arab dengan maksud Melayu:</p>
-        <ul>
-          <li><strong>أَلْبَسُ مَلابِسَ المَدْرَسَةِ</strong> — <em id="match1">__________</em></li>
-          <li><strong>أَتَنَاوَلُ الفُطُورَ</strong> — <em id="match2">__________</em></li>
-        </ul>
-        <p>Pilihan maksud:</p>
-        <ul>
-          <li onclick="document.getElementById('match1').innerText='Saya memakai pakaian sekolah'">Saya memakai pakaian sekolah</li>
-          <li onclick="document.getElementById('match2').innerText='Saya makan sarapan'">Saya makan sarapan</li>
-        </ul>
-        <button class="check-btn" onclick="checkMatching()">Semak Padanan</button>
-        <div id="match-result" class="result"></div>
-      </div>
-    </div>
+      <!-- Ulang blok ini untuk soalan 2 hingga 5 -->
 
-    <p class="arabic" style="text-align:center; font-size: 1.1em;">الحَمْدُ لِلَّهِ عَلَى يَوْمٍ جَمِيلٍ.</p>
+    </section>
   </div>
-
-  <script>
-    function allowDrop(ev) {
-      ev.preventDefault();
-    }
-    function drag(ev) {
-      ev.dataTransfer.setData("text", ev.target.innerText);
-    }
-    function drop(ev) {
-      ev.preventDefault();
-      const data = ev.dataTransfer.getData("text");
-      const span = document.createElement("span");
-      span.innerText = data;
-      span.className = "draggable";
-      span.setAttribute("draggable", "true");
-      span.addEventListener('dragstart', drag);
-      ev.target.appendChild(span);
-    }
-    const draggables = document.querySelectorAll('.draggable');
-    draggables.forEach(el => {
-      el.addEventListener('dragstart', drag);
-    });
-
-    function checkOrder() {
-      const correct = ["أَسْتَيْقِظُ", "مِنَ", "النَّوْمِ", "السَّاعَةَ", "السَّادِسَةَ", "صَبَاحًا"];
-      const dropped = Array.from(document.getElementById("dropzone").children).map(el => el.innerText.trim());
-      const result = document.getElementById("order-result");
-      if (JSON.stringify(correct) === JSON.stringify(dropped)) {
-        result.innerText = "✅ Susunan betul! Tahniah!";
-      } else {
-        result.innerText = "❌ Susunan belum betul. Cuba lagi!";
-      }
-    }
-
-    function checkMatching() {
-      const match1 = document.getElementById("match1").innerText.trim();
-      const match2 = document.getElementById("match2").innerText.trim();
-      const result = document.getElementById("match-result");
-      if (match1 === "Saya memakai pakaian sekolah" && match2 === "Saya makan sarapan") {
-        result.innerText = "✅ Padanan betul! Syabas!";
-      } else {
-        result.innerText = "❌ Padanan belum betul. Sila semak semula.";
-      }
-    }
-  </script>
 </body>
 </html>
