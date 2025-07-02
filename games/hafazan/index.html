@@ -5,52 +5,116 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>أَعْمَالِي اليَوْمِيَّة - A`mali Al-Yaumiah</title>
   <style>
+    :root {
+      --primary: #2d2d2d;
+      --accent: #5f9ea0;
+      --bg-light: #f9f9f9;
+      --bg-card: #ffffff;
+      --text-muted: #666;
+    }
     body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f0f8ff;
-      color: #333;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--primary);
       margin: 0;
       padding: 20px;
     }
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background: var(--bg-card);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
     }
     h1, h2 {
       text-align: center;
-      color: #2c3e50;
+      color: var(--accent);
     }
     .card {
       display: flex;
       align-items: center;
       margin: 20px 0;
-      padding: 10px;
-      background-color: #e8f5e9;
-      border-radius: 10px;
+      padding: 15px;
+      background-color: #f0f4f3;
+      border-left: 5px solid var(--accent);
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
     .card img {
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
       object-fit: cover;
       border-radius: 8px;
       margin-right: 15px;
+      border: 1px solid #ccc;
     }
     .text {
       flex: 1;
     }
     .arabic {
-      font-size: 1.2em;
+      font-size: 1.3em;
       font-weight: bold;
       direction: rtl;
+      color: #222;
     }
     .translation {
       font-size: 1em;
-      color: #555;
-      margin-top: 5px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    .game-section {
+      margin-top: 50px;
+    }
+    .game-box {
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 12px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+    }
+    .draggable {
+      padding: 8px 12px;
+      margin: 5px;
+      background-color: #dcefe8;
+      border-radius: 6px;
+      cursor: move;
+      display: inline-block;
+      border: 1px solid #a3cfc4;
+    }
+    .dropzone {
+      min-height: 40px;
+      padding: 12px;
+      background-color: #eefaf5;
+      border: 2px dashed #8bc34a;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    ul li {
+      cursor: pointer;
+      margin-bottom: 6px;
+      color: #444;
+    }
+    ul li:hover {
+      background-color: #f2f2f2;
+    }
+    .check-btn {
+      margin-top: 15px;
+      background-color: var(--accent);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .check-btn:hover {
+      background-color: #4d8d8b;
+    }
+    .result {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #388e3c;
     }
   </style>
 </head>
@@ -61,63 +125,88 @@
 
     <p class="arabic" style="text-align:center; font-size: 1.1em;">بِسْمِ اللَّهِ، هَذَا وَصْفٌ لِأَعْمَالِي اليَوْمِيَّةِ.</p>
 
-    <div class="card">
-      <img src="https://cdn.pixabay.com/photo/2017/01/31/13/14/alarm-clock-2022847_960_720.png" alt="bangun pagi">
-      <div class="text">
-        <div class="arabic">أَسْتَيْقِظُ مِنَ النَّوْمِ السَّاعَةَ السَّادِسَةَ صَبَاحًا.</div>
-        <div class="translation">Saya bangun tidur pada pukul enam pagi.</div>
-      </div>
-    </div>
+    <!-- Kad nota kekal seperti asal -->
 
-    <div class="card">
-      <img src="https://cdn.pixabay.com/photo/2014/04/03/11/51/bathroom-312659_960_720.png" alt="ke tandas dan solat">
-      <div class="text">
-        <div class="arabic">أَذْهَبُ إِلَى الحَمَّامِ، ثُمَّ أَتَوَضَّأُ وَأُصَلِّي مَعَ أُسْرَتِي.</div>
-        <div class="translation">Saya pergi ke tandas, berwuduk dan solat bersama keluarga saya.</div>
+    <div class="game-section">
+      <h2>🧠 Hafalan: Susun Semula Ayat</h2>
+      <div class="game-box">
+        <p>Seret dan susun semula perkataan Arab di bawah mengikut susunan asal:</p>
+        <div id="drag-words">
+          <span class="draggable" draggable="true">السَّادِسَةَ</span>
+          <span class="draggable" draggable="true">صَبَاحًا</span>
+          <span class="draggable" draggable="true">مِنَ</span>
+          <span class="draggable" draggable="true">النَّوْمِ</span>
+          <span class="draggable" draggable="true">السَّاعَةَ</span>
+          <span class="draggable" draggable="true">أَسْتَيْقِظُ</span>
+        </div>
+        <div id="dropzone" class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <button class="check-btn" onclick="checkOrder()">Semak Jawapan</button>
+        <div id="order-result" class="result"></div>
       </div>
-    </div>
 
-    <div class="card">
-      <img src="https://cdn.pixabay.com/photo/2014/04/02/10/55/school-uniform-306130_960_720.png" alt="pakai uniform">
-      <div class="text">
-        <div class="arabic">أَلْبَسُ مَلابِسَ المَدْرَسَةِ، ثُمَّ أَتَنَاوَلُ الفُطُورَ.</div>
-        <div class="translation">Saya memakai pakaian sekolah dan makan sarapan.</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <img src="https://cdn.pixabay.com/photo/2013/07/12/12/58/car-146930_960_720.png" alt="pergi sekolah">
-      <div class="text">
-        <div class="arabic">أَذْهَبُ إِلَى المَدْرَسَةِ بِالسَّيَّارَةِ مَعَ وَالِدِي.</div>
-        <div class="translation">Saya pergi ke sekolah dengan kereta bersama ayah saya.</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <img src="https://cdn.pixabay.com/photo/2016/04/01/09/48/teacher-1296693_960_720.png" alt="belajar">
-      <div class="text">
-        <div class="arabic">فِي المَدْرَسَةِ، أَقْرَأُ وَأَكْتُبُ وَأُرَاجِعُ دُرُوسِي وَأَدْرُسُ العَرَبِيَّةَ وَالعُلُومَ.</div>
-        <div class="translation">Di sekolah, saya membaca, menulis, mengulang kaji dan belajar Bahasa Arab dan Sains.</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <img src="https://cdn.pixabay.com/photo/2016/04/01/10/17/badminton-1296988_960_720.png" alt="main badminton">
-      <div class="text">
-        <div class="arabic">فِي المَسَاءِ، أَلْعَبُ البَدْمِنْتُونِ مَعَ أَصْدِقَائِي.</div>
-        <div class="translation">Pada waktu petang, saya bermain badminton dengan kawan-kawan saya.</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <img src="https://cdn.pixabay.com/photo/2020/04/06/12/46/dinner-5006715_960_720.png" alt="makan malam dan tidur">
-      <div class="text">
-        <div class="arabic">فِي اللَّيْلِ، أَتَنَاوَلُ العَشَاءَ وَأَغْسِلُ أَسْنَانِي وَأَنَامُ مُبَكِّرًا.</div>
-        <div class="translation">Pada waktu malam, saya makan malam, memberus gigi dan tidur awal.</div>
+      <h2>🧩 Padankan Arab dan Melayu</h2>
+      <div class="game-box">
+        <p>Padankan ayat Arab dengan maksud Melayu:</p>
+        <ul>
+          <li><strong>أَلْبَسُ مَلابِسَ المَدْرَسَةِ</strong> — <em id="match1">__________</em></li>
+          <li><strong>أَتَنَاوَلُ الفُطُورَ</strong> — <em id="match2">__________</em></li>
+        </ul>
+        <p>Pilihan maksud:</p>
+        <ul>
+          <li onclick="document.getElementById('match1').innerText='Saya memakai pakaian sekolah'">Saya memakai pakaian sekolah</li>
+          <li onclick="document.getElementById('match2').innerText='Saya makan sarapan'">Saya makan sarapan</li>
+        </ul>
+        <button class="check-btn" onclick="checkMatching()">Semak Padanan</button>
+        <div id="match-result" class="result"></div>
       </div>
     </div>
 
     <p class="arabic" style="text-align:center; font-size: 1.1em;">الحَمْدُ لِلَّهِ عَلَى يَوْمٍ جَمِيلٍ.</p>
   </div>
+
+  <script>
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.innerText);
+    }
+    function drop(ev) {
+      ev.preventDefault();
+      const data = ev.dataTransfer.getData("text");
+      const span = document.createElement("span");
+      span.innerText = data;
+      span.className = "draggable";
+      span.setAttribute("draggable", "true");
+      span.addEventListener('dragstart', drag);
+      ev.target.appendChild(span);
+    }
+    const draggables = document.querySelectorAll('.draggable');
+    draggables.forEach(el => {
+      el.addEventListener('dragstart', drag);
+    });
+
+    function checkOrder() {
+      const correct = ["أَسْتَيْقِظُ", "مِنَ", "النَّوْمِ", "السَّاعَةَ", "السَّادِسَةَ", "صَبَاحًا"];
+      const dropped = Array.from(document.getElementById("dropzone").children).map(el => el.innerText.trim());
+      const result = document.getElementById("order-result");
+      if (JSON.stringify(correct) === JSON.stringify(dropped)) {
+        result.innerText = "✅ Susunan betul! Tahniah!";
+      } else {
+        result.innerText = "❌ Susunan belum betul. Cuba lagi!";
+      }
+    }
+
+    function checkMatching() {
+      const match1 = document.getElementById("match1").innerText.trim();
+      const match2 = document.getElementById("match2").innerText.trim();
+      const result = document.getElementById("match-result");
+      if (match1 === "Saya memakai pakaian sekolah" && match2 === "Saya makan sarapan") {
+        result.innerText = "✅ Padanan betul! Syabas!";
+      } else {
+        result.innerText = "❌ Padanan belum betul. Sila semak semula.";
+      }
+    }
+  </script>
 </body>
 </html>
