@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduGames | Homepage</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #777;
+      margin-bottom: 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+
+    .card a {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 20px;
+      background-color: #2e4057;
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .card a:hover {
+      background-color: #3c5671;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kelas Muallim Raja</h1>
+  <p>Selamat datang! Pilih permainan pendidikan anda:</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Pengenalan Sifat Wajib Allah</h3>
+      <a href="sifatwajib.html">Main</a>
+    </div>
+
+    <div class="card">
+      <h3>Permainan Sifat Wajib</h3>
+      <a href="objektif.html">Main</a>
+    </div>
+
+    <div class="card">
+      <h3>Pengenalan Sifat Mustahil Allah</h3>
+      <a href="sifatharam.html">Main</a>
+    </div>
+
+    <div class="card">
+      <h3>Permainan Sifat Mustahil</h3>
+      <a href="dragdrop.html">Main</a>
+    </div>
+
+    <div class="card">
+      <h3>Sifat Allah</h3>
+      <a href="sifat/index.html">Main</a>
+    </div>
+  </div>
+</body>
+</html>
