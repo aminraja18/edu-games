@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuiz 20 Sifat Allah - Sistem Pelajar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
+        
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.2em;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .main-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .answer-btn {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .answer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .correct {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            animation: correctPulse 0.6s ease-in-out;
+        }
+        
+        .incorrect {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .islamic-pattern {
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 2px, transparent 2px);
+            background-size: 40px 40px;
+        }
+        
+        .timer {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            animation: timerPulse 2s infinite;
+        }
+        
+        @keyframes timerPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .leaderboard-item {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 font-['Inter']">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        
+        <!-- Registration Page -->
+        <div id="registrationPage" class="main-card islamic-pattern p-8 text-white text-center">
+            <div class="mb-8">
+                <div class="text-6xl mb-6">🕌</div>
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                    Kuiz 20 Sifat Allah
+                </h1>
+                <p class="text-xl text-purple-200 mb-8">
+                    Sistem Kuiz Interaktif untuk Pelajar
+                </p>
+                
+                <div class="bg-white/10 rounded-2xl p-6 mb-8 backdrop-blur-sm">
+                    <h3 class="text-2xl font-semibold mb-4">Maklumat Kuiz</h3>
+                    <div class="grid md:grid-cols-3 gap-4 text-center">
+                        <div class="bg-white/10 rounded-xl p-4">
+                            <div class="text-2xl font-bold text-yellow-300">10</div>
+                            <div class="text-sm">Soalan</div>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-4">
+                            <div class="text-2xl font-bold text-green-300">⏱️</div>
+                            <div class="text-sm">Bermasa</div>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-4">
+                            <div class="text-2xl font-bold text-blue-300">🎲</div>
+                            <div class="text-sm">Rawak</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="max-w-md mx-auto">
+                    <label class="block text-left mb-2 font-medium">Nama Pelajar:</label>
+                    <input 
+                        type="text" 
+                        id="studentName" 
+                        placeholder="Masukkan nama anda..."
+                        class="w-full p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white/30 mb-6"
+                    >
+                    <button 
+                        id="startQuizBtn" 
+                        class="w-full bg-white text-purple-800 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-purple-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                    >
+                        🚀 Mula Kuiz
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Page -->
+        <div id="quizPage" class="main-card islamic-pattern p-8 text-white" style="display: none;">
+            <!-- Header with Timer -->
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold">Selamat Datang, <span id="displayName"></span>!</h2>
+                    <p class="text-purple-200">Jawab 10 soalan dengan teliti</p>
+                </div>
+                <div class="timer px-6 py-3 rounded-full text-white font-bold text-xl">
+                    ⏱️ <span id="timer">00:00</span>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="bg-white/20 rounded-full h-3 mb-6 backdrop-blur-sm">
+                <div id="progressBar" class="progress-bar h-full rounded-full" style="width: 0%"></div>
+            </div>
+            <p class="text-white/80 mb-6 text-center">
+                Soalan <span id="currentQ">1</span> daripada <span id="totalQ">10</span>
+            </p>
+
+            <!-- Question -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="bg-white/20 px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
+                        Soalan <span id="questionNum">1</span>
+                    </span>
+                    <div class="text-right">
+                        <div class="text-sm text-purple-200">Markah</div>
+                        <div class="text-2xl font-bold" id="score">0</div>
+                    </div>
+                </div>
+                
+                <h3 id="questionText" class="text-2xl md:text-3xl font-semibold leading-relaxed mb-6">
+                    <!-- Question will be inserted here -->
+                </h3>
+            </div>
+
+            <!-- Answer Options -->
+            <div id="answersContainer" class="grid gap-4 mb-8">
+                <!-- Answers will be inserted here -->
+            </div>
+
+            <!-- Next Button -->
+            <div class="text-center">
+                <button id="nextBtn" class="bg-white text-purple-800 px-8 py-3 rounded-full font-semibold text-lg hover:bg-purple-50 transition-all duration-300 transform hover:scale-105 shadow-lg" style="display: none;">
+                    Soalan Seterusnya →
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Page -->
+        <div id="resultsPage" class="main-card islamic-pattern p-8 text-white" style="display: none;">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">🎉</div>
+                <h2 class="text-4xl font-bold mb-4">Tahniah, <span id="resultName"></span>!</h2>
+                <p class="text-xl mb-6">Anda telah selesai menjawab kuiz</p>
+                
+                <div class="bg-white/20 rounded-2xl p-6 mb-8 backdrop-blur-sm">
+                    <div class="grid md:grid-cols-3 gap-4 mb-4">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold mb-2" id="finalScore">0/10</div>
+                            <div class="text-sm text-purple-200">Markah</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold mb-2" id="percentage">0%</div>
+                            <div class="text-sm text-purple-200">Peratusan</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold mb-2" id="finalTime">00:00</div>
+                            <div class="text-sm text-purple-200">Masa</div>
+                        </div>
+                    </div>
+                    <div class="text-lg" id="gradeMessage"></div>
+                </div>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="bg-white/10 rounded-2xl p-6 mb-6 backdrop-blur-sm">
+                <h3 class="text-2xl font-bold mb-4 text-center">🏆 Papan Pendahulu</h3>
+                <div id="leaderboard" class="space-y-3">
+                    <!-- Leaderboard will be populated here -->
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button id="restartBtn" class="bg-white text-purple-800 px-8 py-3 rounded-full font-semibold text-lg hover:bg-purple-50 transition-all duration-300 transform hover:scale-105 shadow-lg mr-4">
+                    🔄 Cuba Lagi
+                </button>
+                <button id="newStudentBtn" class="bg-green-500 text-white px-8 py-3 rounded-full font-semibold text-lg hover:bg-green-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    👤 Pelajar Baru
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const allQuestions = [
+            { q: "Sifat \"ٱلْقِدَمُ\" bermaksud apa?", a: ["Kekal", "Sedia tanpa permulaan", "Mengetahui", "Melihat"], correct: 1 },
+            { q: "Sifat \"قِيَامُهُ بِنَفْسِهِ\" bermaksud?", a: ["Berdiri sendiri", "Berkata-kata", "Mengetahui", "Melihat"], correct: 0 },
+            { q: "Berapa jumlah sifat Salbiah?", a: ["1", "5", "7", "10"], correct: 1 },
+            { q: "Apakah maksud \"ٱلْكَلَامُ\"?", a: ["Mendengar", "Berkata-kata", "Melihat", "Mengetahui"], correct: 1 },
+            { q: "\"Kaunuhu Basiran\" bermaksud apa?", a: ["Allah dalam keadaan melihat", "Allah hidup", "Allah berkata-kata", "Allah mengetahui"], correct: 0 },
+            { q: "Sifat \"ٱلسَّمْعُ\" tergolong dalam kumpulan mana?", a: ["Salbiah", "Ma'nawiyyah", "Ma'ani", "Nafsiah"], correct: 2 },
+            { q: "Sifat \"ٱلْبَصَرُ\" bermaksud apa?", a: ["Melihat", "Mengetahui", "Hidup", "Mendengar"], correct: 0 },
+            { q: "Sifat \"Kaunuhu Aliman\" tergolong dalam kumpulan mana?", a: ["Ma'nawiyyah", "Ma'ani", "Salbiah", "Nafsiah"], correct: 0 },
+            { q: "\"Kaunuhu Mutakalliman\" membawa maksud?", a: ["Allah berkata-kata", "Allah mengetahui", "Allah melihat", "Allah mendengar"], correct: 0 },
+            { q: "Sifat \"ٱلْحَيَاةُ\" tergolong dalam kumpulan mana?", a: ["Salbiah", "Ma'ani", "Ma'nawiyyah", "Nafsiah"], correct: 1 },
+            { q: "Apakah maksud \"Kaunuhu Hayyan\"?", a: ["Allah hidup", "Allah berkata-kata", "Allah melihat", "Allah kekal"], correct: 0 },
+            { q: "Sifat \"ٱلْوُجُودُ\" termasuk dalam kumpulan mana?", a: ["Nafsiah", "Salbiah", "Ma'ani", "Ma'nawiyyah"], correct: 0 },
+            { q: "\"Kaunuhu Muridan\" tergolong dalam kumpulan mana?", a: ["Nafsiah", "Ma'ani", "Ma'nawiyyah", "Salbiah"], correct: 2 },
+            { q: "Apakah maksud \"ٱلْإِرَادَةُ\"?", a: ["Mengetahui", "Melihat", "Hidup", "Berkehendak"], correct: 3 },
+            { q: "Berapa jumlah sifat Ma'ani?", a: ["5", "6", "7", "8"], correct: 2 },
+            { q: "Sifat \"ٱلْقُدْرَةُ\" bermaksud?", a: ["Kuasa", "Ilmu", "Hidup", "Melihat"], correct: 0 },
+            { q: "Sifat \"ٱلْعِلْمُ\" tergolong dalam kumpulan?", a: ["Ma'nawiyyah", "Ma'ani", "Salbiah", "Nafsiah"], correct: 1 },
+            { q: "Sifat \"ٱلْبَقَاءُ\" tergolong dalam kumpulan?", a: ["Salbiah", "Ma'ani", "Ma'nawiyyah", "Nafsiah"], correct: 0 },
+            { q: "Apakah maksud \"Kaunuhu Sami'an\"?", a: ["Allah hidup", "Allah berkata-kata", "Allah mendengar", "Allah melihat"], correct: 2 },
+            { q: "Apakah maksud \"ٱلْوَحْدَانِيَّةُ\"?", a: ["Kekal", "Esa", "Mengetahui", "Berkuasa"], correct: 1 }
+        ];
+
+        let currentStudent = '';
+        let questions = [];
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+        let startTime = 0;
+        let timerInterval = null;
+        let students = JSON.parse(localStorage.getItem('quizStudents') || '[]');
+
+        // Shuffle array function
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Format time function
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Start timer
+        function startTimer() {
+            startTime = Date.now();
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                document.getElementById('timer').textContent = formatTime(elapsed);
+            }, 1000);
+        }
+
+        // Stop timer
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        // Get elapsed time
+        function getElapsedTime() {
+            return Math.floor((Date.now() - startTime) / 1000);
+        }
+
+        // Start quiz
+        function startQuiz() {
+            const name = document.getElementById('studentName').value.trim();
+            if (!name) {
+                alert('Sila masukkan nama anda!');
+                return;
+            }
+
+            currentStudent = name;
+            document.getElementById('displayName').textContent = name;
+            document.getElementById('resultName').textContent = name;
+
+            // Select 10 random questions
+            questions = shuffleArray(allQuestions).slice(0, 10);
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+
+            // Show quiz page
+            document.getElementById('registrationPage').style.display = 'none';
+            document.getElementById('quizPage').style.display = 'block';
+
+            startTimer();
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            
+            document.getElementById('questionNum').textContent = currentQuestion + 1;
+            document.getElementById('currentQ').textContent = currentQuestion + 1;
+            document.getElementById('totalQ').textContent = questions.length;
+            
+            // Check if question contains Arabic text
+            const questionText = question.q;
+            const hasArabic = /[\u0600-\u06FF]/.test(questionText);
+            
+            if (hasArabic) {
+                document.getElementById('questionText').innerHTML = questionText.replace(
+                    /([\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]+)/g,
+                    '<span class="arabic-text">$1</span>'
+                );
+            } else {
+                document.getElementById('questionText').textContent = questionText;
+            }
+            
+            // Randomize answer choices
+            const originalAnswers = [...question.a];
+            const correctAnswer = originalAnswers[question.correct];
+            
+            // Create array with indices and shuffle it
+            const answerIndices = [0, 1, 2, 3];
+            for (let i = answerIndices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [answerIndices[i], answerIndices[j]] = [answerIndices[j], answerIndices[i]];
+            }
+            
+            // Create shuffled answers and find new correct index
+            const shuffledAnswers = answerIndices.map(i => originalAnswers[i]);
+            const newCorrectIndex = shuffledAnswers.indexOf(correctAnswer);
+            
+            // Store the new correct index for this question
+            question.shuffledCorrect = newCorrectIndex;
+            
+            const answersContainer = document.getElementById('answersContainer');
+            answersContainer.innerHTML = '';
+            
+            shuffledAnswers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.className = 'answer-btn bg-white/10 hover:bg-white/20 p-4 rounded-xl text-left font-medium backdrop-blur-sm border border-white/20';
+                button.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="bg-white/20 w-8 h-8 rounded-full flex items-center justify-center mr-4 text-sm font-bold">
+                            ${String.fromCharCode(65 + index)}
+                        </span>
+                        <span>${answer}</span>
+                    </div>
+                `;
+                button.onclick = () => selectAnswer(index, button);
+                answersContainer.appendChild(button);
+            });
+            
+            // Update progress bar
+            const progress = ((currentQuestion) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            answered = false;
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+
+        function selectAnswer(selectedIndex, buttonElement) {
+            if (answered) return;
+            
+            answered = true;
+            const question = questions[currentQuestion];
+            const buttons = document.querySelectorAll('.answer-btn');
+            
+            buttons.forEach((btn, index) => {
+                btn.style.pointerEvents = 'none';
+                if (index === question.shuffledCorrect) {
+                    btn.classList.add('correct');
+                } else if (index === selectedIndex && index !== question.shuffledCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+            
+            if (selectedIndex === question.shuffledCorrect) {
+                score++;
+                document.getElementById('score').textContent = score;
+            }
+            
+            setTimeout(() => {
+                document.getElementById('nextBtn').style.display = 'inline-block';
+            }, 1000);
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            stopTimer();
+            const elapsedTime = getElapsedTime();
+            const percentage = Math.round((score / questions.length) * 100);
+            
+            // Save student result
+            const studentResult = {
+                name: currentStudent,
+                score: score,
+                total: questions.length,
+                percentage: percentage,
+                time: elapsedTime,
+                timeFormatted: formatTime(elapsedTime),
+                date: new Date().toLocaleString('ms-MY')
+            };
+            
+            students.push(studentResult);
+            students.sort((a, b) => {
+                if (b.percentage === a.percentage) {
+                    return a.time - b.time; // If same percentage, faster time wins
+                }
+                return b.percentage - a.percentage; // Higher percentage wins
+            });
+            
+            localStorage.setItem('quizStudents', JSON.stringify(students));
+            
+            // Show results page
+            document.getElementById('quizPage').style.display = 'none';
+            document.getElementById('resultsPage').style.display = 'block';
+            
+            document.getElementById('finalScore').textContent = `${score}/${questions.length}`;
+            document.getElementById('percentage').textContent = `${percentage}%`;
+            document.getElementById('finalTime').textContent = formatTime(elapsedTime);
+            
+            let gradeMessage = '';
+            if (percentage >= 90) {
+                gradeMessage = '🌟 Cemerlang! Pengetahuan anda tentang Sifat Allah sangat baik!';
+            } else if (percentage >= 80) {
+                gradeMessage = '👏 Bagus! Anda mempunyai pemahaman yang baik.';
+            } else if (percentage >= 70) {
+                gradeMessage = '👍 Sederhana. Teruskan usaha untuk memperbaiki lagi.';
+            } else if (percentage >= 60) {
+                gradeMessage = '📚 Perlu lebih banyak pembelajaran. Jangan berputus asa!';
+            } else {
+                gradeMessage = '💪 Teruskan belajar! Setiap usaha akan membuahkan hasil.';
+            }
+            
+            document.getElementById('gradeMessage').textContent = gradeMessage;
+            
+            // Update progress bar to 100%
+            document.getElementById('progressBar').style.width = '100%';
+            
+            // Update leaderboard
+            updateLeaderboard();
+        }
+
+        function updateLeaderboard() {
+            const leaderboard = document.getElementById('leaderboard');
+            leaderboard.innerHTML = '';
+            
+            if (students.length === 0) {
+                leaderboard.innerHTML = '<p class="text-center text-white/60">Tiada rekod pelajar lagi.</p>';
+                return;
+            }
+            
+            students.slice(0, 10).forEach((student, index) => {
+                const item = document.createElement('div');
+                item.className = 'leaderboard-item rounded-xl p-4 flex items-center justify-between';
+                
+                let medal = '';
+                if (index === 0) medal = '🥇';
+                else if (index === 1) medal = '🥈';
+                else if (index === 2) medal = '🥉';
+                else medal = `${index + 1}.`;
+                
+                item.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-3">${medal}</span>
+                        <div>
+                            <div class="font-semibold">${student.name}</div>
+                            <div class="text-sm text-white/70">${student.date}</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold">${student.score}/${student.total} (${student.percentage}%)</div>
+                        <div class="text-sm text-white/70">⏱️ ${student.timeFormatted}</div>
+                    </div>
+                `;
+                
+                leaderboard.appendChild(item);
+            });
+        }
+
+        function restartQuiz() {
+            // Reset quiz for same student
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+            
+            document.getElementById('score').textContent = '0';
+            document.getElementById('resultsPage').style.display = 'none';
+            document.getElementById('quizPage').style.display = 'block';
+            
+            // Generate new random questions
+            questions = shuffleArray(allQuestions).slice(0, 10);
+            
+            startTimer();
+            displayQuestion();
+        }
+
+        function newStudent() {
+            // Reset everything for new student
+            currentStudent = '';
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+            stopTimer();
+            
+            document.getElementById('studentName').value = '';
+            document.getElementById('score').textContent = '0';
+            document.getElementById('resultsPage').style.display = 'none';
+            document.getElementById('registrationPage').style.display = 'block';
+        }
+
+        // Event listeners
+        document.getElementById('startQuizBtn').onclick = startQuiz;
+        document.getElementById('nextBtn').onclick = nextQuestion;
+        document.getElementById('restartBtn').onclick = restartQuiz;
+        document.getElementById('newStudentBtn').onclick = newStudent;
+
+        // Allow Enter key to start quiz
+        document.getElementById('studentName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                startQuiz();
+            }
+        });
+
+        // Initialize leaderboard on page load
+        updateLeaderboard();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96729a6105fec237',t:'MTc1Mzg1NDg4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
