@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sifat Wajib Bagi Allah</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      font-size: 2.2em;
+      margin-bottom: 30px;
+      border-bottom: 3px solid #3498db;
+      padding-bottom: 15px;
+    }
+    h2 {
+      text-align: center;
+      color: #34495e;
+      font-size: 1.5em;
+      margin-bottom: 25px;
+    }
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    li {
+      background: linear-gradient(135deg, #e8f4fd 0%, #f0f8ff 100%);
+      margin: 15px 0;
+      padding: 18px;
+      border-radius: 12px;
+      font-size: 18px;
+      border-left: 5px solid #3498db;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    li:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+    }
+    .button-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+    button {
+      padding: 12px 25px;
+      font-size: 16px;
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      margin: 0 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .page-indicator {
+      text-align: center;
+      margin-top: 20px;
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+    .arabic {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="content">
+    <!-- Content will be injected here -->
+  </div>
+
+  <script>
+    const pages = [
+      {
+        title: "Sifat-Sifat Wajib Bagi Allah",
+        content: `
+          <h2>Empat Kategori Utama</h2>
+          <ul>
+            <li>1. <span class="arabic">النَّفْسِيَّة</span> (Nafsiah)</li>
+            <li>2. <span class="arabic">السَّلْبِيَّة</span> (Salbiah)</li>
+            <li>3. <span class="arabic">الْمَعَانِي</span> (Ma'ani)</li>
+            <li>4. <span class="arabic">الْمَعْنَوِيَّة</span> (Ma'nawiyyah)</li>
+          </ul>
+        `
+      },
+      {
+        title: "النَّفْسِيَّة (Nafsiah)",
+        content: `
+          <ul>
+            <li><span class="arabic">ٱلْوُجُودُ</span> – Allah itu ada</li>
+          </ul>
+        `
+      },
+      {
+        title: "السَّلْبِيَّة (Salbiah)",
+        content: `
+          <ul>
+            <li><span class="arabic">ٱلْقِدَمُ</span> – Sedia (tanpa permulaan)</li>
+            <li><span class="arabic">ٱلْبَقَاءُ</span> – Kekal (tanpa kesudahan)</li>
+            <li><span class="arabic">مُخَالَفَتُهُ لِلْحَوَادِثِ</span> – Tidak menyerupai makhluk</li>
+            <li><span class="arabic">قِيَامُهُ بِنَفْسِهِ</span> – Berdiri dengan sendiri</li>
+            <li><span class="arabic">ٱلْوَحْدَانِيَّةُ</span> – Esa</li>
+          </ul>
+        `
+      },
+      {
+        title: "الْمَعَانِي (Ma'ani)",
+        content: `
+          <ul>
+            <li><span class="arabic">ٱلْقُدْرَةُ</span> – Kuasa</li>
+            <li><span class="arabic">ٱلْإِرَادَةُ</span> – Kehendak</li>
+            <li><span class="arabic">ٱلْعِلْمُ</span> – Mengetahui</li>
+            <li><span class="arabic">ٱلْحَيَاةُ</span> – Hidup</li>
+            <li><span class="arabic">ٱلسَّمْعُ</span> – Mendengar</li>
+            <li><span class="arabic">ٱلْبَصَرُ</span> – Melihat</li>
+            <li><span class="arabic">ٱلْكَلَامُ</span> – Berkata-kata</li>
+          </ul>
+        `
+      },
+      {
+        title: "الْمَعْنَوِيَّة (Ma'nawiyyah)",
+        content: `
+          <ul>
+            <li><span class="arabic">كَوْنُهُ قَادِرًا</span> – Keadaan Allah berkuasa</li>
+            <li><span class="arabic">كَوْنُهُ مُرِيدًا</span> – Keadaan Allah berkehendak</li>
+            <li><span class="arabic">كَوْنُهُ عَالِمًا</span> – Keadaan Allah mengetahui</li>
+            <li><span class="arabic">كَوْنُهُ حَيًّا</span> – Keadaan Allah hidup</li>
+            <li><span class="arabic">كَوْنُهُ سَمِيعًا</span> – Keadaan Allah mendengar</li>
+            <li><span class="arabic">كَوْنُهُ بَصِيرًا</span> – Keadaan Allah melihat</li>
+            <li><span class="arabic">كَوْنُهُ مُتَكَلِّمًا</span> – Keadaan Allah berkata-kata</li>
+          </ul>
+        `
+      }
+    ];
+
+    let currentPage = 0;
+
+    function renderPage() {
+      const page = pages[currentPage];
+      document.getElementById('content').innerHTML = `
+        <h1>${page.title}</h1>
+        ${page.content}
+        <div class="button-container">
+          ${currentPage > 0 ? '<button onclick="prevPage()">← Kembali</button>' : ''}
+          ${currentPage < pages.length - 1 ? '<button onclick="nextPage()">Seterusnya →</button>' : ''}
+        </div>
+        <div class="page-indicator">
+          Halaman ${currentPage + 1} dari ${pages.length}
+        </div>
+      `;
+    }
+
+    function nextPage() {
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+        renderPage();
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 0) {
+        currentPage--;
+        renderPage();
+      }
+    }
+
+    // Render first page
+    renderPage();
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96726f427004e551',t:'MTc1Mzg1MzExOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
