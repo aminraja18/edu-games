@@ -1,0 +1,375 @@
+<!DOCTYPE html><html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sirah Rasul - Permainan Kad Flip</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1c7c54 0%, #163a2f 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #fff;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+}
+
+.header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.islamic-symbols {
+  font-size: 2rem;
+  margin-top: 10px;
+}
+
+.game-container {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f1c40f, #d4ac0d);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  width: 10%;
+}
+
+.question-counter {
+  text-align: center;
+  color: #f1f1f1;
+  font-size: 1rem;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.card {
+  width: 400px;
+  height: 250px;
+  perspective: 1000px;
+  margin: 0 auto 30px;
+}
+
+.inner-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.inner-card:hover {
+  transform: scale(1.02);
+}
+
+.flipped {
+  transform: rotateY(180deg) !important;
+}
+
+.flipped:hover {
+  transform: rotateY(180deg) scale(1.02) !important;
+}
+
+.front, .back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  padding: 25px;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.front {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  color: #2c3e50;
+  border: 3px solid #16a085;
+}
+
+.front::before {
+  content: "☪️";
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.5rem;
+}
+
+.back {
+  background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+  color: white;
+  transform: rotateY(180deg);
+  border: 3px solid #229954;
+}
+
+.back::before {
+  content: "📿";
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.5rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 120px;
+}
+
+.flip-btn {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+}
+
+.next-btn {
+  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+  color: white;
+}
+
+.reset-btn {
+  background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+  color: white;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  min-width: 80px;
+}
+
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: block;
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 320px;
+    height: 200px;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  button {
+    width: 200px;
+  }
+}
+
+.flip-hint {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🕌 Permainan Sirah Rasul ﷺ</h1>
+    <p>Uji pengetahuan anda tentang kehidupan Rasulullah</p>
+    <div class="islamic-symbols">☪️ 📿 🕋</div>
+  </div>  <div class="game-container">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div><div class="question-counter" id="questionCounter">
+  Soalan 1 daripada 10
+</div>
+
+<div class="card">
+  <div class="inner-card" id="innerCard" onclick="flipCard()">
+    <div class="front" id="question">Soalan akan dipaparkan di sini</div>
+    <div class="back" id="answer">Jawapan akan dipaparkan di sini</div>
+  </div>
+</div>
+
+<div class="flip-hint">Klik pada kad untuk melihat jawapan</div>
+
+<div class="buttons">
+  <button class="flip-btn" onclick="flipCard()">🔄 Flip Kad</button>
+  <button class="next-btn" onclick="nextQuestion()">➡️ Seterusnya</button>
+  <button class="reset-btn" onclick="resetGame()">🔄 Mula Semula</button>
+</div>
+
+<div class="stats">
+  <div class="stat-item">
+    <span class="stat-number" id="currentQuestion">1</span>
+    <span>Soalan</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number" id="totalQuestions">10</span>
+    <span>Jumlah</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number" id="flipsCount">0</span>
+    <span>Flip</span>
+  </div>
+</div>
+
+  </div>  <script>
+    const questions = [
+      {q: "Siapakah sahabat yang dijamin syurga?", a: "Abu Bakar, Umar, Uthman, Ali, Talhah, Az-Zubair, Sa'ad, Sa'id, Abdurrahman, Abu Ubaidah"},
+      {q: "Berapa orangkah sahabat Nabi yang meninggal ketika Perang Tabuk?", a: "1 orang"},
+      {q: "Bagaimana malaikat Jibril membersihkan hati Nabi?", a: "Membasuh dengan air zam-zam"},
+      {q: "Apakah nikmat terbesar yang perlu kita syukuri?", a: "Lahir sebagai umat Muhammad ﷺ"},
+      {q: "Siapakah yang terakhir dalam nasab Nabi Muhammad?", a: "Adnan"},
+      {q: "Siapakah nama anak-anak Nabi Muhammad ﷺ?", a: "Al-Qasim, Zainab, Ruqayyah, Ummu Kulthum, Fatimah, Abdullah, Ibrahim"},
+      {q: "Pada umur berapakah Nabi Muhammad ﷺ kehilangan ibunya?", a: "6 tahun"},
+      {q: "Siapakah nama anak Nabi Muhammad ﷺ yang masih hidup sehingga Nabi wafat?", a: "Fatimah رضي الله عنها"},
+      {q: "Berapa orang sahabat Nabi dijamin syurga?", a: "10 orang (Al-Asharah Al-Mubashsharah)"},
+      {q: "Beri 1 nama lain bagi Nabi Muhammad ﷺ", a: "Ahmad / Al-Amin / Al-Fatih / Rahmatan lil Alamin"}
+    ];
+
+    let current = 0;
+    let flipsCount = 0;
+
+    const questionEl = document.getElementById("question");
+    const answerEl = document.getElementById("answer");
+    const innerCard = document.getElementById("innerCard");
+    const progressFill = document.getElementById("progressFill");
+    const questionCounter = document.getElementById("questionCounter");
+    const currentQuestionEl = document.getElementById("currentQuestion");
+    const totalQuestionsEl = document.getElementById("totalQuestions");
+    const flipsCountEl = document.getElementById("flipsCount");
+
+    function updateProgress() {
+      const progress = ((current + 1) / questions.length) * 100;
+      progressFill.style.width = progress + '%';
+    }
+
+    function updateStats() {
+      questionCounter.textContent = `Soalan ${current + 1} daripada ${questions.length}`;
+      currentQuestionEl.textContent = current + 1;
+      totalQuestionsEl.textContent = questions.length;
+      flipsCountEl.textContent = flipsCount;
+    }
+
+    function showQuestion() {
+      questionEl.textContent = questions[current].q;
+      answerEl.textContent = questions[current].a;
+      updateProgress();
+      updateStats();
+    }
+
+    function flipCard() {
+      innerCard.classList.toggle("flipped");
+      if (innerCard.classList.contains("flipped")) {
+        flipsCount++;
+        updateStats();
+      }
+    }
+
+    function nextQuestion() {
+      current = (current + 1) % questions.length;
+      innerCard.classList.remove("flipped");
+      showQuestion();
+
+      if (current === 0 && flipsCount > 0) {
+        setTimeout(() => {
+          alert("🎉 Tahniah! Anda telah menyelesaikan semua soalan! ☪️");
+        }, 300);
+      }
+    }
+
+    function resetGame() {
+      current = 0;
+      flipsCount = 0;
+      innerCard.classList.remove("flipped");
+      showQuestion();
+    }
+
+    document.addEventListener('keydown', function(event) {
+      switch(event.key) {
+        case ' ':
+        case 'Enter':
+          event.preventDefault();
+          flipCard();
+          break;
+        case 'ArrowRight':
+        case 'n':
+          event.preventDefault();
+          nextQuestion();
+          break;
+        case 'r':
+          event.preventDefault();
+          resetGame();
+          break;
+      }
+    });
+
+    showQuestion();
+  </script></body>
+</html>
