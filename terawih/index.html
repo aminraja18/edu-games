@@ -202,10 +202,12 @@
     // Data handler for leaderboard
     const dataHandler = {
       onDataChanged(data) {
-        leaderboardData = data.sort((a, b) => {
-          if (b.score !== a.score) return b.score - a.score;
-          return a.time - b.time;
-        });
+        leaderboardData = data
+  .sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    return a.time - b.time; // masa lebih cepat menang
+  })
+  .slice(0, 10);
         renderLeaderboard();
       }
     };
@@ -460,7 +462,7 @@ document.getElementById('finalTime').textContent = totalTime;
             </div>
             <div class="flex items-center gap-4 text-sm">
               <span class="text-emerald-600 font-bold">${entry.score} markah</span>
-              <span class="text-gray-400">${entry.time}s</span>
+              <span class="text-gray-500">${entry.time} saat</span>
             </div>
           </div>
         `;
