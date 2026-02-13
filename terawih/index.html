@@ -196,6 +196,8 @@
     let playerName = "";
     let leaderboardData = [];
     let isAnswering = false;
+    let startTime = 0;
+    let endTime = 0;
 
     // Data handler for leaderboard
     const dataHandler = {
@@ -404,7 +406,9 @@
       
       // Show results
       document.getElementById('finalScore').textContent = score;
-      document.getElementById('finalTime').textContent = timer;
+      endTime = Date.now();
+const totalTime = Math.floor((endTime - startTime) / 1000);
+document.getElementById('finalTime').textContent = totalTime;
       document.getElementById('correctCount').textContent = score / 10;
       
       // Create confetti
@@ -419,7 +423,7 @@
       const result = await window.dataSdk.create({
         name: playerName,
         score: score,
-        time: timer,
+        time: totalTime,
         createdAt: new Date().toISOString()
       });
       
