@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="ms" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuiz Solat Terawih &amp; Witir</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Nunito', sans-serif; }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes confetti {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+    }
+    
+    .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+    .pulse { animation: pulse 0.3s ease-in-out; }
+    .shake { animation: shake 0.4s ease-in-out; }
+    .bounce { animation: bounce 0.5s ease-in-out; }
+    
+    .btn-answer {
+      transition: all 0.2s ease;
+    }
+    
+    .btn-answer:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .btn-answer:active {
+      transform: translateY(0);
+    }
+    
+    .progress-bar {
+      transition: width 0.3s ease;
+    }
+    
+    .correct-answer {
+      background: linear-gradient(135deg, #10b981, #059669) !important;
+      color: white !important;
+    }
+    
+    .wrong-answer {
+      background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+      color: white !important;
+    }
+    
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      animation: confetti 1s ease-out forwards;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
+  <div class="h-full w-full overflow-auto">
+   <div class="min-h-full flex items-center justify-center p-4">
+    <div class="w-full max-w-lg"><!-- Start Screen -->
+     <div id="startScreen" class="bg-white rounded-3xl shadow-xl p-8 fade-in">
+      <div class="text-center mb-8">
+       <div class="text-6xl mb-4">
+        🕌
+       </div>
+       <h1 id="quizTitle" class="text-2xl font-extrabold text-emerald-800 mb-2">Solat Sunat Terawih &amp; Witir</h1>
+       <p class="text-gray-500">Uji pengetahuan anda tentang solat sunat</p>
+      </div>
+      <div class="space-y-4">
+       <div><label for="playerName" class="block text-sm font-semibold text-gray-700 mb-2">Nama Anda</label> <input type="text" id="playerName" placeholder="Masukkan nama anda" class="w-full px-4 py-3 rounded-xl border-2 border-emerald-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all text-lg">
+        <p id="nameError" class="text-red-500 text-sm mt-1 hidden">⚠️ Sila masukkan nama anda</p>
+       </div><button id="startButton" onclick="startGame()" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"> 🚀 Mula Permainan </button>
+      </div>
+      <div class="mt-6 p-4 bg-emerald-50 rounded-xl">
+       <p class="text-sm text-emerald-700 text-center">📝 <b>10 soalan</b> menanti anda!<br>
+         Setiap jawapan betul = <b>10 markah</b></p>
+      </div>
+     </div><!-- Game Screen -->
+     <div id="gameScreen" class="hidden">
+      <div class="bg-white rounded-3xl shadow-xl p-6 fade-in"><!-- Header Stats -->
+       <div class="flex justify-between items-center mb-6">
+        <div class="flex items-center gap-2 bg-amber-100 px-4 py-2 rounded-full"><span class="text-xl">⏱️</span> <span id="timer" class="font-bold text-amber-700">0</span> <span class="text-amber-600 text-sm">saat</span>
+        </div>
+        <div class="flex items-center gap-2 bg-emerald-100 px-4 py-2 rounded-full"><span class="text-xl">⭐</span> <span id="score" class="font-bold text-emerald-700">0</span> <span class="text-emerald-600 text-sm">markah</span>
+        </div>
+       </div><!-- Progress Bar -->
+       <div class="mb-6">
+        <div class="flex justify-between text-sm text-gray-500 mb-2"><span>Soalan <span id="currentQ">1</span> / 10</span> <span id="progressPercent">0%</span>
+        </div>
+        <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+         <div id="progressBar" class="progress-bar h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 0%"></div>
+        </div>
+       </div><!-- Question -->
+       <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 mb-6">
+        <h2 id="question" class="text-xl font-bold text-gray-800 text-center leading-relaxed"></h2>
+       </div><!-- Answers -->
+       <div id="answers" class="space-y-3"></div><!-- Feedback Message -->
+       <div id="feedback" class="hidden mt-4 p-4 rounded-xl text-center font-bold text-lg"></div>
+      </div>
+     </div><!-- End Screen -->
+     <div id="endScreen" class="hidden">
+      <div class="bg-white rounded-3xl shadow-xl p-8 fade-in relative overflow-hidden">
+       <div id="confettiContainer"></div>
+       <div class="text-center mb-8">
+        <div class="text-6xl mb-4 bounce">
+         🎉
+        </div>
+        <h2 class="text-2xl font-extrabold text-emerald-800 mb-2">Tahniah!</h2>
+        <p class="text-gray-500">Anda telah menyelesaikan kuiz</p>
+       </div>
+       <div class="bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl p-6 mb-6">
+        <div class="text-center">
+         <p class="text-gray-600 mb-2">Markah Anda</p>
+         <p id="finalScore" class="text-5xl font-extrabold text-emerald-600 mb-2"></p>
+         <p class="text-gray-500">daripada 100 markah</p>
+        </div>
+        <div class="flex justify-center gap-8 mt-4 pt-4 border-t border-emerald-200">
+         <div class="text-center">
+          <p class="text-2xl font-bold text-amber-600" id="finalTime">0</p>
+          <p class="text-sm text-gray-500">saat</p>
+         </div>
+         <div class="text-center">
+          <p class="text-2xl font-bold text-emerald-600" id="correctCount">0</p>
+          <p class="text-sm text-gray-500">betul</p>
+         </div>
+        </div>
+       </div><!-- Leaderboard -->
+       <div class="mb-6">
+        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center justify-center gap-2">🏆 Papan Pendahulu</h3>
+        <div id="leaderboard" class="space-y-2 max-h-48 overflow-auto"></div>
+        <p id="noLeaderboard" class="text-center text-gray-400 py-4 hidden">Tiada rekod lagi</p>
+       </div><button onclick="restartGame()" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"> 🔄 Main Semula </button>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    // Questions database
+    const questions = [
+      {q: "Apakah hukum solat Terawih?", a: ["Wajib", "Sunat Muakkad", "Harus", "Makruh"], c: 1},
+      {q: "Bilakah solat Terawih dilakukan?", a: ["Selepas Subuh", "Selepas Zohor", "Selepas Isyak", "Selepas Maghrib"], c: 2},
+      {q: "Berapakah rakaat Terawih yang dilakukan Nabi SAW?", a: ["2 rakaat", "4 rakaat", "8 rakaat", "20 rakaat"], c: 2},
+      {q: "Apakah maksud perkataan 'Terawih'?", a: ["Berdiri", "Berehat", "Membaca", "Berdoa"], c: 1},
+      {q: "Bolehkah Terawih dilakukan secara bersendirian di rumah?", a: ["Tidak boleh", "Boleh", "Hanya di masjid", "Wajib berjemaah"], c: 1},
+      {q: "Apakah hukum solat Witir?", a: ["Wajib", "Sunat Muakkad", "Makruh", "Haram"], c: 1},
+      {q: "Berapakah minimum rakaat solat Witir?", a: ["1 rakaat", "2 rakaat", "3 rakaat", "5 rakaat"], c: 0},
+      {q: "Bilangan rakaat Witir mestilah...", a: ["Genap", "Lebih 10", "Kurang 5", "Ganjil"], c: 3},
+      {q: "Bilakah waktu yang afdal untuk solat Witir?", a: ["Awal malam", "Tengah malam", "Akhir malam", "Sebelum tidur"], c: 2},
+      {q: "Bolehkah solat Witir dilakukan dua kali dalam satu malam?", a: ["Boleh", "Tidak boleh", "Kadang-kadang", "Wajib"], c: 1}
+    ];
+
+    // Default config
+    const defaultConfig = {
+      quiz_title: "Solat Sunat Terawih & Witir",
+      start_button_text: "Mula Permainan",
+      background_color: "#ecfdf5",
+      surface_color: "#ffffff",
+      text_color: "#065f46",
+      primary_action_color: "#10b981",
+      secondary_action_color: "#14b8a6",
+      font_family: "Nunito",
+      font_size: 16
+    };
+
+    // Game state
+    let shuffled = [];
+    let currentIndex = 0;
+    let score = 0;
+    let timer = 0;
+    let timerInterval = null;
+    let playerName = "";
+    let leaderboardData = [];
+    let isAnswering = false;
+
+    // Data handler for leaderboard
+    const dataHandler = {
+      onDataChanged(data) {
+        leaderboardData = data.sort((a, b) => {
+          if (b.score !== a.score) return b.score - a.score;
+          return a.time - b.time;
+        });
+        renderLeaderboard();
+      }
+    };
+
+    // Initialize SDKs
+    async function initApp() {
+      // Initialize Element SDK
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          const font = config.font_family || defaultConfig.font_family;
+          const baseSize = config.font_size || defaultConfig.font_size;
+          
+          document.body.style.fontFamily = `${font}, sans-serif`;
+          
+          const title = document.getElementById('quizTitle');
+          if (title) {
+            title.textContent = config.quiz_title || defaultConfig.quiz_title;
+            title.style.fontSize = `${baseSize * 1.5}px`;
+          }
+          
+          const startBtn = document.getElementById('startButton');
+          if (startBtn) {
+            startBtn.innerHTML = `🚀 ${config.start_button_text || defaultConfig.start_button_text}`;
+          }
+          
+          document.body.style.background = `linear-gradient(135deg, ${config.background_color || defaultConfig.background_color}, ${config.secondary_action_color || defaultConfig.secondary_action_color}22)`;
+          
+          document.querySelectorAll('.bg-white').forEach(el => {
+            el.style.backgroundColor = config.surface_color || defaultConfig.surface_color;
+          });
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (v) => window.elementSdk.setConfig({ background_color: v })
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (v) => window.elementSdk.setConfig({ surface_color: v })
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (v) => window.elementSdk.setConfig({ text_color: v })
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (v) => window.elementSdk.setConfig({ primary_action_color: v })
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (v) => window.elementSdk.setConfig({ secondary_action_color: v })
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (v) => window.elementSdk.setConfig({ font_family: v })
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (v) => window.elementSdk.setConfig({ font_size: v })
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["quiz_title", config.quiz_title || defaultConfig.quiz_title],
+          ["start_button_text", config.start_button_text || defaultConfig.start_button_text]
+        ])
+      });
+
+      // Initialize Data SDK
+      const result = await window.dataSdk.init(dataHandler);
+      if (!result.isOk) {
+        console.error("Failed to initialize Data SDK");
+      }
+    }
+
+    // Start game
+    function startGame() {
+      const nameInput = document.getElementById('playerName');
+      const nameError = document.getElementById('nameError');
+      playerName = nameInput.value.trim();
+      
+      if (!playerName) {
+        nameError.classList.remove('hidden');
+        nameInput.classList.add('border-red-400');
+        nameInput.focus();
+        return;
+      }
+      
+      nameError.classList.add('hidden');
+      nameInput.classList.remove('border-red-400');
+      
+      // Shuffle questions
+      shuffled = [...questions].sort(() => Math.random() - 0.5);
+      currentIndex = 0;
+      score = 0;
+      timer = 0;
+      
+      // Show game screen
+      document.getElementById('startScreen').classList.add('hidden');
+      document.getElementById('gameScreen').classList.remove('hidden');
+      document.getElementById('gameScreen').classList.add('fade-in');
+      
+      // Start timer
+      timerInterval = setInterval(() => {
+        timer++;
+        document.getElementById('timer').textContent = timer;
+      }, 1000);
+      
+      // Load first question
+      loadQuestion();
+    }
+
+    // Load question
+    function loadQuestion() {
+      if (currentIndex >= shuffled.length) {
+        endGame();
+        return;
+      }
+      
+      isAnswering = false;
+      const q = shuffled[currentIndex];
+      
+      // Update progress
+      const progress = ((currentIndex) / shuffled.length) * 100;
+      document.getElementById('currentQ').textContent = currentIndex + 1;
+      document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+      document.getElementById('progressBar').style.width = progress + '%';
+      
+      // Show question
+      document.getElementById('question').textContent = q.q;
+      
+      // Create answer buttons
+      const answersDiv = document.getElementById('answers');
+      answersDiv.innerHTML = '';
+      
+      const letters = ['A', 'B', 'C', 'D'];
+      q.a.forEach((text, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-answer w-full py-4 px-6 bg-white border-2 border-gray-200 hover:border-emerald-400 hover:bg-emerald-50 rounded-xl text-left font-semibold text-gray-700 flex items-center gap-4';
+        btn.innerHTML = `
+          <span class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-lg text-gray-500 font-bold text-sm">${letters[i]}</span>
+          <span>${text}</span>
+        `;
+        btn.onclick = () => checkAnswer(i, btn);
+        answersDiv.appendChild(btn);
+      });
+      
+      // Hide feedback
+      document.getElementById('feedback').classList.add('hidden');
+    }
+
+    // Check answer
+    function checkAnswer(selected, btn) {
+      if (isAnswering) return;
+      isAnswering = true;
+      
+      const q = shuffled[currentIndex];
+      const isCorrect = selected === q.c;
+      const feedback = document.getElementById('feedback');
+      const allBtns = document.querySelectorAll('.btn-answer');
+      
+      // Disable all buttons
+      allBtns.forEach(b => b.disabled = true);
+      
+      // Show correct answer
+      allBtns[q.c].classList.add('correct-answer');
+      
+      if (isCorrect) {
+        score += 10;
+        document.getElementById('score').textContent = score;
+        btn.classList.add('pulse');
+        feedback.textContent = '✅ Betul! Syabas!';
+        feedback.className = 'mt-4 p-4 rounded-xl text-center font-bold text-lg bg-emerald-100 text-emerald-700';
+      } else {
+        btn.classList.add('wrong-answer', 'shake');
+        feedback.textContent = '❌ Salah! Jawapan yang betul: ' + q.a[q.c];
+        feedback.className = 'mt-4 p-4 rounded-xl text-center font-bold text-lg bg-red-100 text-red-700';
+      }
+      
+      feedback.classList.remove('hidden');
+      
+      // Next question
+      currentIndex++;
+      setTimeout(loadQuestion, 1500);
+    }
+
+    // End game
+    async function endGame() {
+      clearInterval(timerInterval);
+      
+      // Show end screen
+      document.getElementById('gameScreen').classList.add('hidden');
+      document.getElementById('endScreen').classList.remove('hidden');
+      document.getElementById('endScreen').classList.add('fade-in');
+      
+      // Show results
+      document.getElementById('finalScore').textContent = score;
+      document.getElementById('finalTime').textContent = timer;
+      document.getElementById('correctCount').textContent = score / 10;
+      
+      // Create confetti
+      createConfetti();
+      
+      // Check limit before saving
+      if (leaderboardData.length >= 999) {
+        return;
+      }
+      
+      // Save to leaderboard
+      const result = await window.dataSdk.create({
+        name: playerName,
+        score: score,
+        time: timer,
+        createdAt: new Date().toISOString()
+      });
+      
+      if (!result.isOk) {
+        console.error("Failed to save score");
+      }
+    }
+
+    // Render leaderboard
+    function renderLeaderboard() {
+      const container = document.getElementById('leaderboard');
+      const noData = document.getElementById('noLeaderboard');
+      
+      if (leaderboardData.length === 0) {
+        container.innerHTML = '';
+        noData.classList.remove('hidden');
+        return;
+      }
+      
+      noData.classList.add('hidden');
+      
+      // Show top 10
+      const top10 = leaderboardData.slice(0, 10);
+      
+      container.innerHTML = top10.map((entry, i) => {
+        const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`;
+        const highlight = entry.name === playerName && entry.score === score ? 'bg-emerald-100 border-emerald-300' : 'bg-gray-50 border-gray-200';
+        
+        return `
+          <div class="flex items-center justify-between p-3 rounded-xl border ${highlight}">
+            <div class="flex items-center gap-3">
+              <span class="text-lg font-bold w-8">${medal}</span>
+              <span class="font-semibold text-gray-700">${entry.name}</span>
+            </div>
+            <div class="flex items-center gap-4 text-sm">
+              <span class="text-emerald-600 font-bold">${entry.score} markah</span>
+              <span class="text-gray-400">${entry.time}s</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Create confetti effect
+    function createConfetti() {
+      const container = document.getElementById('confettiContainer');
+      const colors = ['#10b981', '#f59e0b', '#3b82f6', '#ec4899', '#8b5cf6'];
+      
+      for (let i = 0; i < 20; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.top = '50%';
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        piece.style.animationDelay = Math.random() * 0.5 + 's';
+        container.appendChild(piece);
+        
+        setTimeout(() => piece.remove(), 1500);
+      }
+    }
+
+    // Restart game
+    function restartGame() {
+      document.getElementById('endScreen').classList.add('hidden');
+      document.getElementById('startScreen').classList.remove('hidden');
+      document.getElementById('startScreen').classList.add('fade-in');
+      document.getElementById('playerName').value = '';
+    }
+
+    // Initialize app
+    initApp();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cd01aef626d5615',t:'MTc3MDk0MTQ1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
